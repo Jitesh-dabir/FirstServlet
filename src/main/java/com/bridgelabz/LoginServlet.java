@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
         urlPatterns = {"/LoginServlet"},
         initParams = {
                 @WebInitParam(name = "namePattern", value = "^[A-Z]+[A-Za-z0-9]{2}$"),
-                @WebInitParam(name = "passwordPattern", value = "[A-Za-z0-9]{8,}$"),
+                @WebInitParam(name = "passwordPattern", value = "^(?=.*[A-Z])[a-zA-Z0-9]*.{8,}$"),
                 @WebInitParam(name = "userId", value = "Jitesh")
         }
 )

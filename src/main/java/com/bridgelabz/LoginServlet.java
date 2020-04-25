@@ -9,34 +9,37 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.regex.Pattern;
 
 @WebServlet(
         description = "Login servlet testing",
         urlPatterns = {"/LoginServlet"},
         initParams = {
-                @WebInitParam(name = "user", value = "Jitesh"),
-                @WebInitParam(name = "password", value = "1234")
+                @WebInitParam(name = "namePattern", value = "^[A-Z]+[A-Za-z0-9]{2}$"),
+                @WebInitParam(name = "userId", value = "Jitesh"),
+                @WebInitParam(name = "password", value = "1234"),
         }
 )
 
 public class LoginServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse responce) throws ServletException, IOException {
-        String user = request.getParameter("user");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userName = request.getParameter("name");
+        String userId = request.getParameter("userName");
         String password = request.getParameter("password");
 
-        String userId = getServletConfig().getInitParameter("user");
+        String user = getServletConfig().getInitParameter("userId");
         String passwordValue = getServletConfig().getInitParameter("password");
+        String namePattern = getServletConfig().getInitParameter("namePattern");
 
-        if (userId.equals(user) && passwordValue.equals(password)) {
+        if (userId.equals(user) && passwordValue.equals(password) && Pattern.matches(namePattern, userName)) {
             request.setAttribute("user", user);
-            request.getRequestDispatcher("LoginSuccess.jsp").forward(request, responce);
+            request.getRequestDispatcher("LoginSuccess.jsp").forward(request, response);
         } else {
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/Login.html");
-            PrintWriter out = responce.getWriter();
+            PrintWriter out = response.getWriter();
             out.println("<font color=red> Either username and password is wrong </font>");
-            requestDispatcher.include(request, responce);
+            requestDispatcher.include(request, response);
         }
-
     }
 }
